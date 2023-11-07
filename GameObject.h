@@ -13,14 +13,17 @@ public:
 	int height;
 	int radius;
 	int rectangleOrCircle;
+	float directionX;
+	float directionY;
 	// shape canon
 	// orientation pour canon
 	// vitatilité pour brique
 	// mouvement boule
 
-	GameObject(int positionX, int positionY, int w, int h, int r, int rOC);
+	GameObject(int positionX, int positionY, int w, int h, int r, int rOC, float dirX, float dirY);
 
-	sf::RectangleShape rectangleDisplay(int positionX, int positionY, int w, int h);
-	sf::CircleShape circleDisplay(int positionX, int positionY, int r);
-	sf::CircleShape canonDisplay(int positionX, int positionY, int r);
+	sf::RectangleShape rectangleDisplay();
+	sf::CircleShape circleDisplay();
+	sf::CircleShape triangleDisplay();
+	void movement(float t);
 };
