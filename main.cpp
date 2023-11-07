@@ -6,18 +6,35 @@ using namespace std;
 
 int main()
 {
+    int i = 0;
+
+    int* pi = &i;
+    *pi = 7;
+
+    int& ri = *pi;
+    
+
+
     float time = 0;
 
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Casse Brique" /*, sf::Style::Fullscreen*/);
+    sf::RenderWindow window(sf::VideoMode(1366, 768), "Casse Brique" /*, sf::Style::Fullscreen*/);
     sf::Clock timer;
     vector<GameObject*>objectList;
 
+    float windowSizeX = window.getSize().x;
+    float windowSizeY = window.getSize().y;
+
     objectList = {
         // 0 = rectangle (w,h) | 1 = circle (r) | 2 = canon
-        new GameObject(150, 200, 0, 0, 100, 1, 20, 20),
-        new GameObject(400, 300, 220, 150, 0, 0, 0, 0),
-        new GameObject(20, 20, 0, 0, 50, 2, 0, 0)
+        // for direction ++ = bottom right | +- = bottom left | -+ = top right | -- = top left
+        new GameObject("circle",150.f, 200.f, 0, 0, 100, 1, 1, 1),
+        new GameObject("rectangle",400.f, 300.f, 220, 150, 0, 0, 0, 0),
+        new GameObject("triangle",windowSizeX/2, windowSizeY-100, 0, 0, 50, 2, 0, 0)
     };
+
+    for (int i = 0; i < objectList.size(); i++) {
+        objectList[i]->initialisation();
+    }
 
     while (window.isOpen())
     {
@@ -27,27 +44,35 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+        //cout << mousePosition.x << " " << mousePosition.y << endl;
 
         window.clear();
-
-        objectList[0]->movement(time);
+        objectList[0]->movement(time,windowSizeX,windowSizeY);
 
         for (int i = 0; i < objectList.size() ; i++) {
             if (objectList[i]->rectangleOrCircle == 0) {
-                window.draw(objectList[i]->rectangleDisplay());
+                window.draw(*objectList[i]->rectangleDisplay());
             }
             else if (objectList[i]->rectangleOrCircle == 1) {
-                window.draw(objectList[i]->circleDisplay());
+                window.draw(*objectList[i]->circleDisplay());
             }
             else if (objectList[i]->rectangleOrCircle == 2) {
-                window.draw(objectList[i]->triangleDisplay());
+                window.draw(*objectList[i]->triangleDisplay(mousePosition, windowSizeX, windowSizeY));
+
+				sf::Vertex line[] =
+				{
+					sf::Vertex(sf::Vector2f(mousePosition.x, mousePosition.y)),
+					sf::Vertex(sf::Vector2f(objectList[i]->posX, objectList[i]->posY))
+				};
+
+				window.draw(line, 2, sf::Lines);
             }
         }
 
         window.display();
-        time += 0.000001;
-        //time = timer.restart().asSeconds();
-        cout << time << endl;
+        time = timer.restart().asSeconds();
     }
 
     return 0;
