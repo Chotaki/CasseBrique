@@ -6,14 +6,16 @@ using namespace std;
 
 int main()
 {
+    /*
+    règles pour les pointeurs
+
     int i = 0;
 
     int* pi = &i;
     *pi = 7;
 
     int& ri = *pi;
-    
-
+    */
 
     float time = 0;
 
@@ -25,11 +27,11 @@ int main()
     float windowSizeY = window.getSize().y;
 
     objectList = {
-        // 0 = rectangle (w,h) | 1 = circle (r) | 2 = canon
+        // 0 = rectangle (w,h) | 1 = circle (r) | 2 = triangle
         // for direction ++ = bottom right | +- = bottom left | -+ = top right | -- = top left
-        new GameObject("circle",150.f, 200.f, 0, 0, 100, 1, 1, 1),
-        new GameObject("rectangle",400.f, 300.f, 220, 150, 0, 0, 0, 0),
-        new GameObject("triangle",windowSizeX/2, windowSizeY-100, 0, 0, 50, 2, 0, 0)
+        new GameObject(150.f, 200.f, 0, 0, 100, 1, 1, 1),
+        new GameObject(400.f, 300.f, 220, 150, 0, 0, 0, 0),
+        new GameObject(windowSizeX/2, windowSizeY-100, 0, 0, 50, 2, 0, 0)
     };
 
     for (int i = 0; i < objectList.size(); i++) {
@@ -52,13 +54,13 @@ int main()
         objectList[0]->movement(time,windowSizeX,windowSizeY);
 
         for (int i = 0; i < objectList.size() ; i++) {
-            if (objectList[i]->rectangleOrCircle == 0) {
+            if (objectList[i]->shapeType == 0) {
                 window.draw(*objectList[i]->rectangleDisplay());
             }
-            else if (objectList[i]->rectangleOrCircle == 1) {
+            else if (objectList[i]->shapeType == 1) {
                 window.draw(*objectList[i]->circleDisplay());
             }
-            else if (objectList[i]->rectangleOrCircle == 2) {
+            else if (objectList[i]->shapeType == 2) {
                 window.draw(*objectList[i]->triangleDisplay(mousePosition, windowSizeX, windowSizeY));
 
 				sf::Vertex line[] =

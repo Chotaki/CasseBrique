@@ -9,24 +9,23 @@
 
 using namespace std;
 
-GameObject::GameObject(string t, float positionX, float positionY, int w, int h, int r, int rOC,float dirX, float dirY) {
-	type = t;
+GameObject::GameObject(float positionX, float positionY, int w, int h, int r, int rOC,float dirX, float dirY) {
 	posX = positionX;
 	posY = positionY;
 	width = w;
 	height = h;
 	radius = r;
-	rectangleOrCircle = rOC;
+	shapeType = rOC;
 	directionX = dirX;
 	directionY = dirY;
 }
 
 void GameObject::initialisation() {
-	if(type == "rectangle"){
+	if(shapeType == 0){
 		shape = new sf::RectangleShape(sf::Vector2f(width, height));
-	}else if (type == "circle"){
+	}else if (shapeType == 1){
 		shape = new sf::CircleShape(radius);
-	}else if (type == "triangle"){
+	}else if (shapeType == 2){
 		shape = new sf::CircleShape(radius,3);
 	}
 }

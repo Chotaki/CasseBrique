@@ -7,13 +7,12 @@ using namespace std;
 class GameObject
 {
 public:
-	string type;
 	float posX;
 	float posY;
 	int width;
 	int height;
 	int radius;
-	int rectangleOrCircle;
+	int shapeType;
 	float directionX;
 	float directionY;
 	sf::Shape* shape;
@@ -22,7 +21,7 @@ public:
 	// vitatilité pour brique
 	// mouvement boule
 
-	GameObject(string t,float positionX, float positionY, int w, int h, int r, int rOC, float dirX, float dirY);
+	GameObject(float positionX, float positionY, int w, int h, int r, int rOC, float dirX, float dirY);
 
 	void initialisation();
 	sf::Shape* rectangleDisplay();
