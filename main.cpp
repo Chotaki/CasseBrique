@@ -29,14 +29,11 @@ int main()
     objectList = {
         // 0 = rectangle (w,h) | 1 = circle (r) | 2 = triangle
         // for direction ++ = bottom right | +- = bottom left | -+ = top right | -- = top left
-        new GameObject(150.f, 200.f, 0, 0, 100, 1, 1, 1),
-        new GameObject(400.f, 300.f, 220, 150, 0, 0, 0, 0),
+        new GameObject(100.f, 200.f, 0, 0, 50, 1, 0, 10),
+        new GameObject(400.f, 500.f, 220, 150, 0, 0, 0, 0),
         new GameObject(windowSizeX/2, windowSizeY-100, 0, 0, 50, 2, 0, 0)
     };
 
-    for (int i = 0; i < objectList.size(); i++) {
-        objectList[i]->initialisation();
-    }
 
     while (window.isOpen())
     {
@@ -51,7 +48,10 @@ int main()
         //cout << mousePosition.x << " " << mousePosition.y << endl;
 
         window.clear();
-        objectList[0]->movement(time,windowSizeX,windowSizeY);
+
+        if (objectList[0]->isColliding(objectList) == false) {
+            objectList[0]->movement(time, windowSizeX, windowSizeY);
+        }
 
         for (int i = 0; i < objectList.size() ; i++) {
             if (objectList[i]->shapeType == 0) {

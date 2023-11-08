@@ -23,7 +23,6 @@ public:
 
 	GameObject(float positionX, float positionY, int w, int h, int r, int rOC, float dirX, float dirY);
 
-	void initialisation();
 	sf::Shape* rectangleDisplay();
 	sf::Shape* circleDisplay();
 	sf::Shape* triangleDisplay(sf::Vector2i deg, float x, float y);
