@@ -19,6 +19,8 @@ int main()
 
     float time = 0;
 
+    bool fire = true;
+
     sf::RenderWindow window(sf::VideoMode(1366, 768), "Casse Brique" /*, sf::Style::Fullscreen*/);
     sf::Clock timer;
     vector<GameObject*>objectList;
@@ -29,29 +31,47 @@ int main()
     objectList = {
         // 0 = rectangle (w,h) | 1 = circle (r) | 2 = triangle
         // for direction ++ = bottom right | +- = bottom left | -+ = top right | -- = top left
-        new GameObject(100.f, 200.f, 0, 0, 50, 1, 0, 10),
-        new GameObject(400.f, 500.f, 220, 150, 0, 0, 0, 0),
+        new GameObject(windowSizeX / 2 - 10 , windowSizeY - 110, 0, 0, 10, 1, 0, 10),
+        new GameObject(500.f, 100.f, 220, 150, 0, 0, 0, 0),
         new GameObject(windowSizeX/2, windowSizeY-100, 0, 0, 50, 2, 0, 0)
     };
-
 
     while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            switch (event.type) {
+                case sf::Event::Closed:
+                    window.close();
+                    break;
+
+                case sf::Event::MouseButtonPressed:
+                    if (fire){
+						if (event.mouseButton.button == sf::Mouse::Left)
+						{
+							objectList[0]->shoot(objectList, sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+							window.draw(*objectList[0]->circleDisplay());
+                            fire = false;
+						}
+                    }
+                    break;
+
+                default:
+                    break;
+            }
         }
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
-        //cout << mousePosition.x << " " << mousePosition.y << endl;
-
         window.clear();
 
-        if (objectList[0]->isColliding(objectList) == false) {
+        if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY) == false) {
             objectList[0]->movement(time, windowSizeX, windowSizeY);
         }
+
+		if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY) == true) {
+            fire = true;
+		}
 
         for (int i = 0; i < objectList.size() ; i++) {
             if (objectList[i]->shapeType == 0) {

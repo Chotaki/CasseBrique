@@ -15,6 +15,7 @@ public:
 	int shapeType;
 	float directionX;
 	float directionY;
+	sf::Vector2f direction;
 	sf::Shape* shape;
 	// shape canon
 	// orientation pour canon
@@ -27,5 +28,7 @@ public:
 	sf::Shape* circleDisplay();
 	sf::Shape* triangleDisplay(sf::Vector2i deg, float x, float y);
 	void movement(float t, float x, float y);
-	bool isColliding(vector<GameObject*> l);
+	bool isColliding(vector<GameObject*> l, float x, float y);
+	void shoot(vector<GameObject*> l, sf::Vector2i mousePos);
+	void changeDirection(sf::Vector2f oDirection);
 };
