@@ -31,9 +31,10 @@ int main()
     objectList = {
         // 0 = rectangle (w,h) | 1 = circle (r) | 2 = triangle
         // for direction ++ = bottom right | +- = bottom left | -+ = top right | -- = top left
-        new GameObject(windowSizeX / 2 - 10 , windowSizeY - 110, 0, 0, 10, 1, 0, 10),
-        new GameObject(500.f, 100.f, 220, 150, 0, 0, 0, 0),
-        new GameObject(windowSizeX/2, windowSizeY-100, 0, 0, 50, 2, 0, 0)
+        new GameObject(windowSizeX / 2 - 10 , windowSizeY - 110, 0, 0, 10, 1),
+        new GameObject(500.f, 100.f, 220, 150, 0, 0 ),
+		new GameObject(100.f, 100.f, 220, 150, 0, 0),
+        new GameObject(windowSizeX/2, windowSizeY-100, 0, 0, 50, 2)
     };
 
     while (window.isOpen())
@@ -65,11 +66,12 @@ int main()
 
         window.clear();
 
-        if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY) == false) {
+        if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY, time) == false) {
             objectList[0]->movement(time, windowSizeX, windowSizeY);
         }
 
-		if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY) == true) {
+		if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY, time) == true) {
+			objectList[0]->movement(time, windowSizeX, windowSizeY);
             fire = true;
 		}
 

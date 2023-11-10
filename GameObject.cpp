@@ -10,15 +10,13 @@
 
 using namespace std;
 
-GameObject::GameObject(float positionX, float positionY, int w, int h, int r, int rOC,float dirX, float dirY) {
+GameObject::GameObject(float positionX, float positionY, int w, int h, int r, int rOC) {
 	posX = positionX;
 	posY = positionY;
 	width = w;
 	height = h;
 	radius = r;
 	shapeType = rOC;
-	directionX = dirX;
-	directionY = dirY;
 
 	if (shapeType == 0) {
 		shape = new sf::RectangleShape(sf::Vector2f(width, height));
@@ -69,7 +67,7 @@ bool IsInsideInterval(int v, int vMin, int vMax)
 	return v >= vMin && v <= vMax;
 }
 
-bool GameObject::isColliding(vector<GameObject*> l,float x, float y) {
+bool GameObject::isColliding(vector<GameObject*> l,float x, float y, float t) {
 	if (shapeType == 1) {
 		height = radius * 2;
 		width = radius * 2;
@@ -80,9 +78,14 @@ bool GameObject::isColliding(vector<GameObject*> l,float x, float y) {
 	int Ymin = posY;
 	int Ymax = posY + height;
 
+	bool collisionEnter = false;
+	bool collisionStay = false;
+	bool collisionExit = false;
+
 	for (int i = 0; i < l.size(); i++) {
 
 		if (l[i]->shapeType == 0) {
+			
 			int otherXmin = l[i]->posX;
 			int otherXmax = l[i]->posX + l[i]->width;
 			int otherYmin = l[i]->posY;
@@ -97,40 +100,108 @@ bool GameObject::isColliding(vector<GameObject*> l,float x, float y) {
 			bool IsXmaxInsideScreen = IsInsideInterval(Xmax, 0, x);
 			bool IsYmaxInsideScreen = IsInsideInterval(Ymax, 0, y);
 
+			// window border collision
 			if (IsXminInsideScreen == false) {
+				direction.x = -direction.x;
 				return true;
 			}
-			if (IsYminInsideScreen == false) {
+			else if (IsYminInsideScreen == false) {
+				direction.y = -direction.y;
 				return true;
 			}
-			if (IsXmaxInsideScreen == false) {
+			else if (IsXmaxInsideScreen == false) {
+				direction.x = -direction.x;
 				return true;
 			}
-			if (IsYmaxInsideScreen == false) {
+			else if (IsYmaxInsideScreen == false) {
 				return true;
 			}
+			
+			// box box
 			if ((IsYMinInside || IsYMaxInside) && (IsXMinInside || IsXMaxInside)) {
-				return true;
+
+				collisionEnter = true;
+
+				if (IsXMinInside == false) {
+					if (collisionStay == false) {
+						collisionEnter = false;
+						if (collisionExit == false) {
+							direction.x = -direction.x;
+							collisionStay = true;
+						}
+					}
+					collisionExit = true;
+					return true;
+				}
+
+				else if (IsYMinInside == false) {
+					if (collisionEnter == true) {
+						collisionEnter = false;
+						if (collisionExit == false) {
+							direction.y = -direction.y;
+							collisionStay = true;
+						}
+					}
+					collisionStay = false;
+					collisionExit = true;
+					return true;
+				}
+				else if (IsXMaxInside == false) {
+					if (collisionEnter == true) {
+						collisionEnter = false;
+						if (collisionExit == false) {
+							direction.x = -direction.x;
+							collisionStay = true;
+						}
+					}
+					collisionStay = false;
+					collisionExit = true;
+					return true;
+				}
+				else if (IsYMaxInside == false) {
+					if (collisionEnter == true) {
+						collisionEnter = false;
+						if (collisionExit == false) {
+							direction.y = -direction.y;
+							collisionStay = true;
+						}
+					}
+					collisionStay = false;
+					collisionExit = true;
+					return true;
+				}
+				collisionExit = false;
 			}
+			
 		}
 	}
 	return false;
 }
 
 void GameObject::shoot(vector<GameObject*> l, sf::Vector2i mousePos) {
-	posX = l[2]->posX - 10;
-	posY = l[2]->posY - 10;
+	
+	int j ;
 
+	for (int i = 0; i < l.size(); i++ ){
+		if(l[i]->shapeType == 2){
+			j = i;
+		}
+	}
+
+	posX = l[j]->posX - 10;
+	posY = l[j]->posY - 10;
+	
 	sf::Vector2i mouseP = mousePos;
 	sf::Vector2f mousePosF = sf::Vector2f(mouseP.x, mouseP.y);
-	sf::Vector2f ballStartPos(l[2]->posX, l[2]->posY);
+	sf::Vector2f ballStartPos(l[j]->posX, l[j]->posY);
 	sf::Vector2f direction = sf::Vector2f(mousePosF.x - ballStartPos.x, mousePosF.y - ballStartPos.y);
 	changeDirection(direction);
 }
 
 void GameObject::movement(float t, float x, float y) {
-	posX += direction.x * t * 200.f;
-	posY += direction.y * t * 200.f;
+	//cout << direction.x << endl;
+	posX += direction.x * t * 300.f;
+	posY += direction.y * t * 300.f;
 	shape->setPosition(posX, posY);	
 }
 
