@@ -26,8 +26,6 @@ public:
 	sf::Shape* circleDisplay();
 	sf::Shape* triangleDisplay(sf::Vector2i deg, float x, float y);
 	void movement(float t, float x, float y);
-	void movementInversX(float t, float x, float y);
-	void movementInversY(float t, float x, float y);
 	bool isColliding(vector<GameObject*> l, float x, float y, float t);
 	void shoot(vector<GameObject*> l, sf::Vector2i mousePos);
 	void changeDirection(sf::Vector2f oDirection);

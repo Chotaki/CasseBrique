@@ -78,10 +78,6 @@ bool GameObject::isColliding(vector<GameObject*> l,float x, float y, float t) {
 	int Ymin = posY;
 	int Ymax = posY + height;
 
-	bool collisionEnter = false;
-	bool collisionStay = false;
-	bool collisionExit = false;
-
 	for (int i = 0; i < l.size(); i++) {
 
 		if (l[i]->shapeType == 0) {
@@ -114,63 +110,33 @@ bool GameObject::isColliding(vector<GameObject*> l,float x, float y, float t) {
 				return true;
 			}
 			else if (IsYmaxInsideScreen == false) {
+				direction.y = -direction.y;
 				return true;
 			}
 			
 			// box box
 			if ((IsYMinInside || IsYMaxInside) && (IsXMinInside || IsXMaxInside)) {
 
-				collisionEnter = true;
-
-				if (IsXMinInside == false) {
-					if (collisionStay == false) {
-						collisionEnter = false;
-						if (collisionExit == false) {
-							direction.x = -direction.x;
-							collisionStay = true;
-						}
-					}
-					collisionExit = true;
+				if (IsYMinInside == false) {
+					cout << "top";
+					direction.y = -direction.y;
 					return true;
 				}
-
-				else if (IsYMinInside == false) {
-					if (collisionEnter == true) {
-						collisionEnter = false;
-						if (collisionExit == false) {
-							direction.y = -direction.y;
-							collisionStay = true;
-						}
-					}
-					collisionStay = false;
-					collisionExit = true;
+				else if (IsXMinInside == false) {
+					cout << "left";
+					direction.x = -direction.x;
 					return true;
 				}
 				else if (IsXMaxInside == false) {
-					if (collisionEnter == true) {
-						collisionEnter = false;
-						if (collisionExit == false) {
-							direction.x = -direction.x;
-							collisionStay = true;
-						}
-					}
-					collisionStay = false;
-					collisionExit = true;
+					cout << "right";
+					direction.x = -direction.x;
 					return true;
 				}
 				else if (IsYMaxInside == false) {
-					if (collisionEnter == true) {
-						collisionEnter = false;
-						if (collisionExit == false) {
-							direction.y = -direction.y;
-							collisionStay = true;
-						}
-					}
-					collisionStay = false;
-					collisionExit = true;
+					cout << "bottom";
+					direction.y = -direction.y;
 					return true;
 				}
-				collisionExit = false;
 			}
 			
 		}
