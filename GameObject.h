@@ -15,12 +15,15 @@ public:
 	int shapeType;
 	sf::Vector2f direction;
 	sf::Shape* shape;
+	vector<GameObject*>objectCollision;
+
+	int health;
 	// shape canon
 	// orientation pour canon
 	// vitatilité pour brique
 	// mouvement boule
 
-	GameObject(float positionX, float positionY, int w, int h, int r, int rOC);
+	GameObject(float positionX, float positionY, int w, int h, int r, int rOC, int life);
 
 	sf::Shape* rectangleDisplay();
 	sf::Shape* circleDisplay();
@@ -29,4 +32,5 @@ public:
 	bool isColliding(vector<GameObject*> l, float x, float y, float t);
 	void shoot(vector<GameObject*> l, sf::Vector2i mousePos);
 	void changeDirection(sf::Vector2f oDirection);
+	void loseHealth();
 };

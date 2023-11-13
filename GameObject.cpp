@@ -10,13 +10,14 @@
 
 using namespace std;
 
-GameObject::GameObject(float positionX, float positionY, int w, int h, int r, int rOC) {
+GameObject::GameObject(float positionX, float positionY, int w, int h, int r, int rOC, int life) {
 	posX = positionX;
 	posY = positionY;
 	width = w;
 	height = h;
 	radius = r;
 	shapeType = rOC;
+	health = life;
 
 	if (shapeType == 0) {
 		shape = new sf::RectangleShape(sf::Vector2f(width, height));
@@ -32,7 +33,15 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 sf::Shape* GameObject::rectangleDisplay() {
 	sf::Shape* rectangle = shape;
 	sf::Shape& pRect = *rectangle;
-	pRect.setFillColor(sf::Color(0, 250, 250));
+	if ( health == 3){
+		pRect.setFillColor(sf::Color(0, 0, 250));
+	}
+	else if (health == 2) {
+		pRect.setFillColor(sf::Color(0, 250, 0));
+	}
+	else if (health == 1) {
+		pRect.setFillColor(sf::Color(255, 0, 0));
+	}
 	pRect.setPosition(posX, posY);
 	return &pRect;
 }
@@ -67,7 +76,7 @@ bool IsInsideInterval(int v, int vMin, int vMax)
 	return v >= vMin && v <= vMax;
 }
 
-bool GameObject::isColliding(vector<GameObject*> l,float x, float y, float t) {
+bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 	if (shapeType == 1) {
 		height = radius * 2;
 		width = radius * 2;
@@ -78,69 +87,96 @@ bool GameObject::isColliding(vector<GameObject*> l,float x, float y, float t) {
 	int Ymin = posY;
 	int Ymax = posY + height;
 
+	bool IsXminInsideScreen = IsInsideInterval(Xmin, 0, x);
+	bool IsYminInsideScreen = IsInsideInterval(Ymin, 0, y);
+	bool IsXmaxInsideScreen = IsInsideInterval(Xmax, 0, x);
+	bool IsYmaxInsideScreen = IsInsideInterval(Ymax, 0, y);
+
+	// window border collision
+	if (IsXminInsideScreen == false) {
+		direction.x = -direction.x;
+		return true;
+	}
+	else if (IsYminInsideScreen == false) {
+		direction.y = -direction.y;
+		return true;
+	}
+	else if (IsXmaxInsideScreen == false) {
+		direction.x = -direction.x;
+		return true;
+	}
+	else if (IsYmaxInsideScreen == false) {
+		direction.y = -direction.y;
+		return true;
+	}
+
 	for (int i = 0; i < l.size(); i++) {
 
 		if (l[i]->shapeType == 0) {
-			
+
 			int otherXmin = l[i]->posX;
 			int otherXmax = l[i]->posX + l[i]->width;
 			int otherYmin = l[i]->posY;
 			int otherYmax = l[i]->posY + l[i]->height;
-			
+
 			bool IsYMinInside = IsInsideInterval(Ymin, otherYmin, otherYmax);
 			bool IsYMaxInside = IsInsideInterval(Ymax, otherYmin, otherYmax);
 			bool IsXMinInside = IsInsideInterval(Xmin, otherXmin, otherXmax);
 			bool IsXMaxInside = IsInsideInterval(Xmax, otherXmin, otherXmax);
-			bool IsXminInsideScreen = IsInsideInterval(Xmin, 0, x);
-			bool IsYminInsideScreen = IsInsideInterval(Ymin, 0, y);
-			bool IsXmaxInsideScreen = IsInsideInterval(Xmax, 0, x);
-			bool IsYmaxInsideScreen = IsInsideInterval(Ymax, 0, y);
 
-			// window border collision
-			if (IsXminInsideScreen == false) {
-				direction.x = -direction.x;
-				return true;
-			}
-			else if (IsYminInsideScreen == false) {
-				direction.y = -direction.y;
-				return true;
-			}
-			else if (IsXmaxInsideScreen == false) {
-				direction.x = -direction.x;
-				return true;
-			}
-			else if (IsYmaxInsideScreen == false) {
-				direction.y = -direction.y;
-				return true;
-			}
-			
-			// box box
-			if ((IsYMinInside || IsYMaxInside) && (IsXMinInside || IsXMaxInside)) {
+			auto it = std::find(objectCollision.begin(), objectCollision.end(), l[i]);
 
-				if (IsYMinInside == false) {
-					cout << "top";
-					direction.y = -direction.y;
-					return true;
-				}
-				else if (IsXMinInside == false) {
-					cout << "left";
+			if ((IsYMinInside || IsYMaxInside) && (IsXMinInside || IsXMaxInside))
+			{
+				if (it != objectCollision.end()) 
+				{
+					//OnCollisionStay
 					direction.x = -direction.x;
-					return true;
-				}
-				else if (IsXMaxInside == false) {
-					cout << "right";
-					direction.x = -direction.x;
-					return true;
-				}
-				else if (IsYMaxInside == false) {
-					cout << "bottom";
 					direction.y = -direction.y;
-					return true;
+				}
+				else 
+				{
+					//OnCollisionEnter
+					objectCollision.push_back(l[i]);
+
+					l[i]->loseHealth();
+
+					cout << objectCollision.size();
+
+					if (IsYMinInside == false) {
+						cout << "top";
+						direction.y = -direction.y;
+						return true;
+					}
+					else if (IsXMinInside == false) {
+						cout << "left";
+						direction.x = -direction.x;
+						return true;
+					}
+					else if (IsXMaxInside == false) {
+						cout << "right";
+						direction.x = -direction.x;
+						return true;
+					}
+					else if (IsYMaxInside == false) {
+						cout << "bottom";
+						direction.y = -direction.y;
+						return true;
+					}
 				}
 			}
-			
+			else 
+			{
+				if (it != objectCollision.end())
+				{
+					//OnCollisionExit
+					objectCollision.erase(it);
+				}
+
+			}
 		}
 	}
+
 	return false;
 }
 
@@ -173,4 +209,18 @@ void GameObject::movement(float t, float x, float y) {
 
 void GameObject::changeDirection(sf::Vector2f oDirection) {
 	direction = Math::Normalized(oDirection);
+}
+
+void GameObject::loseHealth(){
+	if (health <= 1) {
+		height = 0;
+		width = 0;
+		posX = -1;
+		posY = -1;
+		
+	}
+	else {
+		health -= 1;
+	}
+	shape = new sf::RectangleShape(sf::Vector2f(width, height));
 }

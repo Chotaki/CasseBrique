@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "GameObject.h"
+//#include "Brick.h"
 
 using namespace std;
 
@@ -31,11 +32,70 @@ int main()
     objectList = {
         // 0 = rectangle (w,h) | 1 = circle (r) | 2 = triangle
         // for direction ++ = bottom right | +- = bottom left | -+ = top right | -- = top left
-        new GameObject(windowSizeX / 2 - 10 , windowSizeY - 110, 0, 0, 10, 1),
-        new GameObject(500.f, 100.f, 220, 150, 0, 0 ),
-		new GameObject(100.f, 100.f, 220, 150, 0, 0),
-        new GameObject(windowSizeX/2, windowSizeY-100, 0, 0, 50, 2)
+        new GameObject(windowSizeX / 2 - 10 , windowSizeY - 110, 0, 0, 10, 1,0),
+        new GameObject(windowSizeX/2, windowSizeY-100, 0, 0, 50, 2,0),
+		new GameObject(75.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(155.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(235.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(315.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(395.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(475.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(555.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(635.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(715.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(795.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(875.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(955.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(1035.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(1115.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(1195.f, 100.f, 75, 40, 0, 0,3),
+		new GameObject(75.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(155.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(235.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(315.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(395.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(475.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(555.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(635.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(715.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(795.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(875.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(955.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(1035.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(1115.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(1195.f, 145.f, 75, 40, 0, 0,3),
+		new GameObject(75.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(155.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(235.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(315.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(395.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(475.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(555.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(635.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(715.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(795.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(875.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(955.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(1035.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(1115.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(1195.f, 190.f, 75, 40, 0, 0,3),
+		new GameObject(75.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(155.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(235.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(315.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(395.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(475.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(555.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(635.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(715.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(795.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(875.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(955.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(1035.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(1115.f, 235.f, 75, 40, 0, 0,3),
+		new GameObject(1195.f, 235.f, 75, 40, 0, 0,3),
     };
+
 
     while (window.isOpen())
     {
@@ -66,14 +126,15 @@ int main()
 
         window.clear();
 
-        if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY, time) == false) {
-            objectList[0]->movement(time, windowSizeX, windowSizeY);
-        }
-
 		if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY, time) == true) {
 			objectList[0]->movement(time, windowSizeX, windowSizeY);
-            fire = true;
+			fire = true;
 		}
+		if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY, time) == false) {
+			objectList[0]->movement(time, windowSizeX, windowSizeY);
+		}
+
+		
 
         for (int i = 0; i < objectList.size() ; i++) {
             if (objectList[i]->shapeType == 0) {
