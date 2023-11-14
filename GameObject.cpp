@@ -34,13 +34,13 @@ sf::Shape* GameObject::rectangleDisplay() {
 	sf::Shape* rectangle = shape;
 	sf::Shape& pRect = *rectangle;
 	if ( health == 3){
-		pRect.setFillColor(sf::Color(0, 0, 250));
+		pRect.setFillColor(sf::Color(99, 225, 124));
 	}
 	else if (health == 2) {
-		pRect.setFillColor(sf::Color(0, 250, 0));
+		pRect.setFillColor(sf::Color(236, 163, 79));
 	}
 	else if (health == 1) {
-		pRect.setFillColor(sf::Color(255, 0, 0));
+		pRect.setFillColor(sf::Color(255, 81, 81));
 	}
 	pRect.setPosition(posX, posY);
 	return &pRect;
@@ -133,6 +133,7 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 					//OnCollisionStay
 					direction.x = -direction.x;
 					direction.y = -direction.y;
+					cout << "aaa" << endl;
 				}
 				else 
 				{
@@ -142,6 +143,8 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 					l[i]->loseHealth();
 
 					cout << objectCollision.size();
+
+					cout << "bbb" << endl;
 
 					if (IsYMinInside == false) {
 						cout << "top";
@@ -171,6 +174,8 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 				{
 					//OnCollisionExit
 					objectCollision.erase(it);
+
+					cout << "ccc" << endl;
 				}
 
 			}
