@@ -10,7 +10,7 @@
 
 using namespace std;
 
-GameObject::GameObject(float positionX, float positionY, int w, int h, int r, int rOC, int life) {
+GameObject::GameObject(float positionX, float positionY, int w, int h, int r, int rOC, int life, bool fire) {
 	posX = positionX;
 	posY = positionY;
 	width = w;
@@ -18,6 +18,7 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 	radius = r;
 	shapeType = rOC;
 	health = life;
+	fired = fire;
 
 	if (shapeType == 0) {
 		shape = new sf::RectangleShape(sf::Vector2f(width, height));
@@ -26,20 +27,35 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 		shape = new sf::CircleShape(radius);
 	}
 	else if (shapeType == 2) {
-		shape = new sf::CircleShape(radius, 3);
+		//shape = new sf::RectangleShape(sf::Vector2f(width, height));
+		sf::Texture texture;
+		texture.loadFromFile("img/cannon.png");
+		if (!texture.loadFromFile("img/cannon.png"))
+		{
+			cout << "failed to load image" << std::endl;
+		}else{
+			texture.setSmooth(true);
+
+			textu = texture;
+
+			sf::Sprite sprite;
+			sprite.setTexture(textu);
+
+			look = sprite;
+		}
 	}
 }
 
 sf::Shape* GameObject::rectangleDisplay() {
 	sf::Shape* rectangle = shape;
 	sf::Shape& pRect = *rectangle;
-	if ( health == 3){
+	if ( health == 2){
 		pRect.setFillColor(sf::Color(99, 225, 124));
 	}
-	else if (health == 2) {
+	else if (health == 1) {
 		pRect.setFillColor(sf::Color(236, 163, 79));
 	}
-	else if (health == 1) {
+	else if (health == 0) {
 		pRect.setFillColor(sf::Color(255, 81, 81));
 	}
 	pRect.setPosition(posX, posY);
@@ -49,26 +65,31 @@ sf::Shape* GameObject::rectangleDisplay() {
 sf::Shape* GameObject::circleDisplay() {
 	sf::Shape* circle = shape;
 	sf::Shape& pCirc = *circle;
-	pCirc.setFillColor(sf::Color(200, 200, 200));
-	//pCirc.setPosition(posX, posY);
+	pCirc.setFillColor(sf::Color(222, 250, 252));
 	return &pCirc;
 }
 
-sf::Shape* GameObject::triangleDisplay(sf::Vector2i deg, float x, float y) {
+sf::Sprite GameObject::canonDisplay(sf::Vector2i deg, float x, float y) {
 	float rotation = 180;
-
-	sf::Shape* triangle = shape;
-	sf::Shape& pTria = *triangle;
+	
+	//sf::Shape* canon = shape;
+	//sf::Shape& pCanon = *canon;
 
 	if (0 < deg.x && deg.x < x && 0 < deg.y && deg.y < y) {
-		rotation = -atan2(deg.x - (posX + radius / 2), deg.y - (posY + radius)) * 180 / M_PI;
+		rotation = -atan2(deg.x - posX , deg.y - posY ) * 180 / M_PI;
 	}
 
-	pTria.setOrigin(radius, radius);
-	pTria.setFillColor(sf::Color(0, 0, 250));
-	pTria.setRotation(rotation - 180);
-	pTria.setPosition(posX, posY);
-	return &pTria;
+	look.setPosition(posX, posY);
+	look.setRotation(rotation + 180);
+	look.setOrigin(width*2.35, height*2.35);
+	look.setScale(0.25, 0.25);
+
+	//pCanon.setOrigin(width/2, height/2);
+	//pCanon.setRotation(rotation + 180);
+	//pCanon.setPosition(posX, posY);
+	//pCanon.setTexture(texture); // texture est un sf::Texture
+
+	return look;
 }
  
 bool IsInsideInterval(int v, int vMin, int vMax) 
@@ -106,7 +127,8 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 		return true;
 	}
 	else if (IsYmaxInsideScreen == false) {
-		direction.y = -direction.y;
+		fired = true;
+		objectCollision.clear();
 		return true;
 	}
 
@@ -133,7 +155,7 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 					//OnCollisionStay
 					direction.x = -direction.x;
 					direction.y = -direction.y;
-					cout << "aaa" << endl;
+					//cout << "aaa" << endl;
 				}
 				else 
 				{
@@ -142,27 +164,21 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 
 					l[i]->loseHealth();
 
-					cout << objectCollision.size();
+					//cout << "bbb" << endl;
 
-					cout << "bbb" << endl;
-
-					if (IsYMinInside == false) {
-						cout << "top";
+					if (IsYMinInside == true) {
 						direction.y = -direction.y;
 						return true;
 					}
-					else if (IsXMinInside == false) {
-						cout << "left";
+					else if (IsXMinInside == true) {
 						direction.x = -direction.x;
 						return true;
 					}
-					else if (IsXMaxInside == false) {
-						cout << "right";
+					else if (IsXMaxInside == true) {
 						direction.x = -direction.x;
 						return true;
 					}
-					else if (IsYMaxInside == false) {
-						cout << "bottom";
+					else if (IsYMaxInside == true) {
 						direction.y = -direction.y;
 						return true;
 					}
@@ -175,7 +191,7 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 					//OnCollisionExit
 					objectCollision.erase(it);
 
-					cout << "ccc" << endl;
+					//cout << "ccc" << endl;
 				}
 
 			}
@@ -207,8 +223,8 @@ void GameObject::shoot(vector<GameObject*> l, sf::Vector2i mousePos) {
 
 void GameObject::movement(float t, float x, float y) {
 	//cout << direction.x << endl;
-	posX += direction.x * t * 300.f;
-	posY += direction.y * t * 300.f;
+	posX += direction.x * t * 1000.f;
+	posY += direction.y * t * 1000.f;
 	shape->setPosition(posX, posY);	
 }
 
@@ -217,12 +233,11 @@ void GameObject::changeDirection(sf::Vector2f oDirection) {
 }
 
 void GameObject::loseHealth(){
-	if (health <= 1) {
+	if (health == 0) {
 		height = 0;
 		width = 0;
 		posX = -1;
 		posY = -1;
-		
 	}
 	else {
 		health -= 1;

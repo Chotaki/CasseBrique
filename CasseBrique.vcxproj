@@ -159,6 +159,12 @@
     <ClInclude Include="Math.h" />
     <ClInclude Include="GameObject.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="..\..\..\..\Desktop\Star_Cartoon.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="img\cannon.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
