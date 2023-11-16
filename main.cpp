@@ -156,7 +156,7 @@ int main()
     {
 		// Play main music
 		music.setLoop(true);
-		music.setVolume(50);
+		music.setVolume(2);
 		music.play();
 
 		while (isPlaying == true) {
@@ -235,7 +235,7 @@ int main()
 
 			for (int i = 0; i < objectList.size(); i++) {
 				if (objectList[i]->shapeType == 0) {
-					if (objectList[i]->posX == -1 && objectList[i]->posY == -1) {
+					if (objectList[i]->posX == -100 && objectList[i]->posY == -100) {
 						brickCount = brickCount - 1;
 					}
 				}

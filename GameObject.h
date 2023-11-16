@@ -26,6 +26,7 @@ public:
 	sf::Texture greenText;
 	sf::Sprite greenLook;
 	
+	
 	int health;
 	bool fired;
 

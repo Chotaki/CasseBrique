@@ -22,7 +22,51 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 
 	// Creating our shapes and initialasing our sprites
 	if (shapeType == 0) {
-		shape = new sf::RectangleShape(sf::Vector2f(width, height));
+		sf::Texture redTexture;
+		redTexture.loadFromFile("img/red.png");
+		if (!redTexture.loadFromFile("img/red.png"))
+		{
+			cout << "failed to load image" << std::endl;
+		}
+		else {
+			redText = redTexture;
+
+			sf::Sprite redSprite;
+			redSprite.setTexture(redText);
+
+			redLook = redSprite;
+		}
+
+		sf::Texture orangeTexture;
+		orangeTexture.loadFromFile("img/orange.png");
+		if (!orangeTexture.loadFromFile("img/orange.png"))
+		{
+			cout << "failed to load image" << std::endl;
+		}
+		else {
+			orangeText = orangeTexture;
+
+			sf::Sprite orangeSprite;
+			orangeSprite.setTexture(orangeText);
+
+			orangeLook = orangeSprite;
+		}
+
+		sf::Texture greenTexture;
+		greenTexture.loadFromFile("img/green.png");
+		if (!greenTexture.loadFromFile("img/green.png"))
+		{
+			cout << "failed to load image" << std::endl;
+		}
+		else {
+			greenText = greenTexture;
+
+			sf::Sprite greenSprite;
+			greenSprite.setTexture(greenText);
+
+			greenLook = greenSprite;
+		}
+
 	}
 	else if (shapeType == 1) {
 		shape = new sf::CircleShape(radius);
@@ -48,68 +92,17 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 
 // Display a rectangle
 sf::Sprite GameObject::rectangleDisplay() {
-	//sf::Shape* rectangle = shape;
-	//sf::Shape& pRect = *rectangle;
-
-	sf::Texture red;
-	red.loadFromFile("img/red.png");
-	if (!red.loadFromFile("img/red.png"))
-	{
-		cout << "failed to load image" << std::endl;
-	}
-	else {
-		redText = red;
-
-		sf::Sprite redSprite;
-		redSprite.setTexture(redText);
-
-		redLook = redSprite;
-	}
-
-	sf::Texture orange;
-	orange.loadFromFile("img/orange.png");
-	if (!orange.loadFromFile("img/orange.png"))
-	{
-		cout << "failed to load image" << std::endl;
-	}
-	else {
-		orangeText = orange;
-
-		sf::Sprite orangeSprite;
-		orangeSprite.setTexture(orangeText);
-
-		orangeLook = orangeSprite;
-	}
-
-	sf::Texture green;
-	green.loadFromFile("img/green.png");
-	if (!green.loadFromFile("img/green.png"))
-	{
-		cout << "failed to load image" << std::endl;
-	}
-	else {
-		greenText = green;
-
-		sf::Sprite greenSprite;
-		greenSprite.setTexture(greenText);
-
-		greenLook = greenSprite;
-	}
-
 	if ( health == 2){
 		greenLook.setPosition(posX, posY);
 		return greenLook;
-		//pRect.setFillColor(sf::Color(99, 225, 124));
 	}
 	else if (health == 1) {
 		orangeLook.setPosition(posX, posY);
 		return orangeLook;
-		//pRect.setFillColor(sf::Color(236, 163, 79));
 	}
 	else if (health == 0) {
 		redLook.setPosition(posX, posY);
 		return redLook;
-		//pRect.setFillColor(sf::Color(255, 81, 81));
 	}
 }
 
