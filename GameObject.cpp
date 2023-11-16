@@ -20,6 +20,7 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 	health = life;
 	fired = fire;
 
+	// Creating our shapes and initialasing our sprites
 	if (shapeType == 0) {
 		shape = new sf::RectangleShape(sf::Vector2f(width, height));
 	}
@@ -27,7 +28,6 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 		shape = new sf::CircleShape(radius);
 	}
 	else if (shapeType == 2) {
-		//shape = new sf::RectangleShape(sf::Vector2f(width, height));
 		sf::Texture texture;
 		texture.loadFromFile("img/cannon.png");
 		if (!texture.loadFromFile("img/cannon.png"))
@@ -46,6 +46,7 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 	}
 }
 
+// Display a rectangle
 sf::Shape* GameObject::rectangleDisplay() {
 	sf::Shape* rectangle = shape;
 	sf::Shape& pRect = *rectangle;
@@ -62,18 +63,17 @@ sf::Shape* GameObject::rectangleDisplay() {
 	return &pRect;
 }
 
+// Display a circle
 sf::Shape* GameObject::circleDisplay() {
 	sf::Shape* circle = shape;
 	sf::Shape& pCirc = *circle;
-	pCirc.setFillColor(sf::Color(222, 250, 252));
+	pCirc.setFillColor(sf::Color(169, 208, 218));
 	return &pCirc;
 }
 
+// Display a cannon
 sf::Sprite GameObject::canonDisplay(sf::Vector2i deg, float x, float y) {
 	float rotation = 180;
-	
-	//sf::Shape* canon = shape;
-	//sf::Shape& pCanon = *canon;
 
 	if (0 < deg.x && deg.x < x && 0 < deg.y && deg.y < y) {
 		rotation = -atan2(deg.x - posX , deg.y - posY ) * 180 / M_PI;
@@ -83,21 +83,18 @@ sf::Sprite GameObject::canonDisplay(sf::Vector2i deg, float x, float y) {
 	look.setRotation(rotation + 180);
 	look.setOrigin(width*2.35, height*2.35);
 	look.setScale(0.25, 0.25);
-
-	//pCanon.setOrigin(width/2, height/2);
-	//pCanon.setRotation(rotation + 180);
-	//pCanon.setPosition(posX, posY);
-	//pCanon.setTexture(texture); // texture est un sf::Texture
-
 	return look;
 }
  
+// Verification needed to check collisions
 bool IsInsideInterval(int v, int vMin, int vMax) 
 {
 	return v >= vMin && v <= vMax;
 }
 
+// Collision check
 bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
+	// Checking the collision on a circle only
 	if (shapeType == 1) {
 		height = radius * 2;
 		width = radius * 2;
@@ -113,7 +110,7 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 	bool IsXmaxInsideScreen = IsInsideInterval(Xmax, 0, x);
 	bool IsYmaxInsideScreen = IsInsideInterval(Ymax, 0, y);
 
-	// window border collision
+	// Collisions with the window borders
 	if (IsXminInsideScreen == false) {
 		direction.x = -direction.x;
 		return true;
@@ -132,6 +129,7 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 		return true;
 	}
 
+	// Collisions with the bricks
 	for (int i = 0; i < l.size(); i++) {
 
 		if (l[i]->shapeType == 0) {
@@ -155,7 +153,6 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 					//OnCollisionStay
 					direction.x = -direction.x;
 					direction.y = -direction.y;
-					//cout << "aaa" << endl;
 				}
 				else 
 				{
@@ -163,8 +160,6 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 					objectCollision.push_back(l[i]);
 
 					l[i]->loseHealth();
-
-					//cout << "bbb" << endl;
 
 					if (IsYMinInside == true) {
 						direction.y = -direction.y;
@@ -190,8 +185,6 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 				{
 					//OnCollisionExit
 					objectCollision.erase(it);
-
-					//cout << "ccc" << endl;
 				}
 
 			}
@@ -201,10 +194,12 @@ bool GameObject::isColliding(vector<GameObject*> l, float x, float y, float t) {
 	return false;
 }
 
+// Shooting ability
 void GameObject::shoot(vector<GameObject*> l, sf::Vector2i mousePos) {
 	
 	int j ;
 
+	// Possibility to shoot only from a cannon
 	for (int i = 0; i < l.size(); i++ ){
 		if(l[i]->shapeType == 2){
 			j = i;
@@ -220,18 +215,19 @@ void GameObject::shoot(vector<GameObject*> l, sf::Vector2i mousePos) {
 	sf::Vector2f direction = sf::Vector2f(mousePosF.x - ballStartPos.x, mousePosF.y - ballStartPos.y);
 	changeDirection(direction);
 }
-
+ 
 void GameObject::movement(float t, float x, float y) {
-	//cout << direction.x << endl;
 	posX += direction.x * t * 1000.f;
 	posY += direction.y * t * 1000.f;
 	shape->setPosition(posX, posY);	
 }
 
+// Bounce
 void GameObject::changeDirection(sf::Vector2f oDirection) {
 	direction = Math::Normalized(oDirection);
 }
 
+// Bricks can lose health
 void GameObject::loseHealth(){
 	if (health == 0) {
 		height = 0;

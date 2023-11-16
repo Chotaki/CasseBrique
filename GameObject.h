@@ -1,6 +1,7 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <iostream>
+
+#include <SFML/Graphics.hpp>
 
 using namespace std;
 
@@ -19,12 +20,7 @@ public:
 	sf::Texture textu;
 	sf::Sprite look;
 	
-
-	// shape canon
-	// orientation pour canon
-	// vitatilité pour brique
 	int health;
-	// mouvement boule
 	bool fired;
 
 	GameObject(float positionX, float positionY, int w, int h, int r, int rOC, int life, bool fire);

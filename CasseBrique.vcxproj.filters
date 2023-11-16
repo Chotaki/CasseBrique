@@ -24,30 +24,12 @@
     <ClCompile Include="Math.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Brick.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Ball.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Canon.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Math.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Brick.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="Canon.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
@@ -60,5 +42,25 @@
     <Image Include="img\cannon.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="img\background.jpg">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="img\red.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="img\green.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="img\orange.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sound\sound.wav">
+      <Filter>Fichiers de ressources</Filter>
+    </Media>
+    <Media Include="sound\cannon.wav">
+      <Filter>Fichiers de ressources</Filter>
+    </Media>
   </ItemGroup>
 </Project>

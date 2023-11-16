@@ -1,18 +1,18 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
-#include <sstream>
-#include <string>
+
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
 #include "GameObject.h"
-//#include "Brick.h"
 
 using namespace std;
 
+// Initialise the bricks, the ball and the cannon
 vector<GameObject*> initialisationList() {
 	vector<GameObject*>objectList;
 
 	objectList = {
 		// 0 = rectangle (w,h) | 1 = circle (r) | 2 = cannon
-		// for direction ++ = bottom right | +- = bottom left | -+ = top right | -- = top left
 		new GameObject(1366 / 2 - 10 , 768 - 110, 0, 0, 10, 1,0,true),
 		new GameObject(1366 / 2, 768 - 100,  175, 40, 0, 2,0,false),
 		new GameObject(75.f, 100.f, 75, 40, 0, 0,2,false),
@@ -97,13 +97,37 @@ int main()
     float time = 0;
     bool fire = true;
 
-    sf::RenderWindow window(sf::VideoMode(1366, 768), "Casse Brique" /*, sf::Style::Fullscreen*/);
+    sf::RenderWindow window(sf::VideoMode(1366, 768), "Casse Brique");
     sf::Clock timer;
 	vector<GameObject*>objectList;
 
     float windowSizeX = window.getSize().x;
     float windowSizeY = window.getSize().y;
 
+	// Loading main music
+	sf::Music  music;
+	if (!music.openFromFile("sound/sound.wav")){
+
+		cout << "failed to load music" << endl;
+
+	}else {
+		cout << " music loaded" << endl;
+	}
+
+	// Loading Cannon sound
+	sf::SoundBuffer buffer;
+	sf::Sound sound;
+	if (!buffer.loadFromFile("sound/cannon.wav")){
+
+		cout << "failed to load sound" << std::endl;
+
+	}else {
+		sound.setBuffer(buffer);
+		
+	}
+		
+	
+	// Loading the text and font
 	sf::Text text;
 	sf::Font font;
 	if (!font.loadFromFile("font/Star_Cartoon.ttf"))
@@ -111,23 +135,50 @@ int main()
 		cout << "failed to load font" << std::endl;
 	}
 
+	// Load Background Image
+	sf::Texture background;
+	sf::Sprite bgSprite;
+	background.loadFromFile("img/background.jpg");
+	if (!background.loadFromFile("img/background.jpg"))
+	{
+		cout << "failed to load background" << std::endl;
+	}
+	else {
+		background.setSmooth(true);
+
+		bgSprite.setTexture(background);
+		bgSprite.scale(0.353, 0.353);
+	}
+
 	objectList = initialisationList();
 
     while (window.isOpen())
     {
+		// Play main music
+		music.setLoop(true);
+		music.setVolume(50);
+		music.play();
+
 		while (isPlaying == true) {
+
 			sf::Event event;
 			while (window.pollEvent(event))
 			{
 				switch (event.type) {
+
+				// Ability to close the window
 				case sf::Event::Closed:
+					music.stop();
 					window.close();
 					break;
 
+				// Ability to shoot
 				case sf::Event::MouseButtonPressed:
 					if (objectList[0]->fired) {
 						if (event.mouseButton.button == sf::Mouse::Left)
 						{
+							sound.setVolume(50);
+							sound.play();
 							objectList[0]->shoot(objectList, sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
 							window.draw(*objectList[0]->circleDisplay());
 							objectList[0]->fired = false;
@@ -140,10 +191,16 @@ int main()
 				}
 			}
 
+			// Getting the mouse position
 			sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
-			window.clear(sf::Color(53, 114, 127, 255));
+			// Creating a base background while clearing the window
+			window.clear(sf::Color::White);
 
+			// Display background image
+			window.draw(bgSprite);
+
+			// Collision check
 			if (objectList[0]->isColliding(objectList, windowSizeX, windowSizeY, time) == true) {
 				objectList[0]->movement(time, windowSizeX, windowSizeY);
 			}
@@ -151,6 +208,7 @@ int main()
 				objectList[0]->movement(time, windowSizeX, windowSizeY);
 			}
 
+			// Drawing each shape on the screen
 			for (int i = 0; i < objectList.size(); i++) {
 				if (objectList[i]->shapeType == 0) {
 					window.draw(*objectList[i]->rectangleDisplay());
@@ -161,13 +219,14 @@ int main()
 				else if (objectList[i]->shapeType == 2) {
 					window.draw(objectList[i]->canonDisplay(mousePosition, windowSizeX, windowSizeY));
 
-					/*sf::Vertex line[] =
+					//Possibility to draw a line following the mouse position
+					/* sf::Vertex line[] =
 					{
 						sf::Vertex(sf::Vector2f(mousePosition.x, mousePosition.y)),
 						sf::Vertex(sf::Vector2f(objectList[i]->posX, objectList[i]->posY))
 					};
 
-					window.draw(line, 2, sf::Lines);*/
+					window.draw(line, 2, sf::Lines); */
 				}
 			}
 
@@ -196,6 +255,7 @@ int main()
 			bCount.setPosition(240, 5);
 			window.draw(bCount);
 
+			// Win condition
 			if (brickCount == 0) {
 				isPlaying = false;
 				if (isPlaying == false) {
@@ -219,14 +279,17 @@ int main()
 			time = timer.restart().asSeconds();
 		}
 
+		// Events possible on the win screen
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
 			switch (event.type) {
+			// Closing the window
 			case sf::Event::Closed:
 				window.close();
 				break;
 
+			// Pressing space to restart the game
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::Space) {
 					isPlaying = true;

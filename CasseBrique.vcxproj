@@ -145,17 +145,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="Brick.cpp" />
-    <ClCompile Include="Canon.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="Brick.h" />
-    <ClInclude Include="Canon.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="GameObject.h" />
   </ItemGroup>
@@ -163,7 +157,15 @@
     <Font Include="..\..\..\..\Desktop\Star_Cartoon.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="img\background.jpg" />
     <Image Include="img\cannon.png" />
+    <Image Include="img\green.png" />
+    <Image Include="img\orange.png" />
+    <Image Include="img\red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="sound\cannon.wav" />
+    <Media Include="sound\sound.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// Normalising a vector 
 sf::Vector2f Math::Normalized(sf::Vector2f oDirection){
 
 	sf::Vector2f cache = oDirection;
