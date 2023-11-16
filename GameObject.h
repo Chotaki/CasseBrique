@@ -19,13 +19,19 @@ public:
 	vector<GameObject*>objectCollision;
 	sf::Texture textu;
 	sf::Sprite look;
+	sf::Texture redText;
+	sf::Sprite redLook;
+	sf::Texture orangeText;
+	sf::Sprite orangeLook;
+	sf::Texture greenText;
+	sf::Sprite greenLook;
 	
 	int health;
 	bool fired;
 
 	GameObject(float positionX, float positionY, int w, int h, int r, int rOC, int life, bool fire);
 
-	sf::Shape* rectangleDisplay();
+	sf::Sprite rectangleDisplay();
 	sf::Shape* circleDisplay();
 	sf::Sprite canonDisplay(sf::Vector2i deg, float x, float y);
 	void movement(float t, float x, float y);

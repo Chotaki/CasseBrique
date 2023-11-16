@@ -47,20 +47,70 @@ GameObject::GameObject(float positionX, float positionY, int w, int h, int r, in
 }
 
 // Display a rectangle
-sf::Shape* GameObject::rectangleDisplay() {
-	sf::Shape* rectangle = shape;
-	sf::Shape& pRect = *rectangle;
+sf::Sprite GameObject::rectangleDisplay() {
+	//sf::Shape* rectangle = shape;
+	//sf::Shape& pRect = *rectangle;
+
+	sf::Texture red;
+	red.loadFromFile("img/red.png");
+	if (!red.loadFromFile("img/red.png"))
+	{
+		cout << "failed to load image" << std::endl;
+	}
+	else {
+		redText = red;
+
+		sf::Sprite redSprite;
+		redSprite.setTexture(redText);
+
+		redLook = redSprite;
+	}
+
+	sf::Texture orange;
+	orange.loadFromFile("img/orange.png");
+	if (!orange.loadFromFile("img/orange.png"))
+	{
+		cout << "failed to load image" << std::endl;
+	}
+	else {
+		orangeText = orange;
+
+		sf::Sprite orangeSprite;
+		orangeSprite.setTexture(orangeText);
+
+		orangeLook = orangeSprite;
+	}
+
+	sf::Texture green;
+	green.loadFromFile("img/green.png");
+	if (!green.loadFromFile("img/green.png"))
+	{
+		cout << "failed to load image" << std::endl;
+	}
+	else {
+		greenText = green;
+
+		sf::Sprite greenSprite;
+		greenSprite.setTexture(greenText);
+
+		greenLook = greenSprite;
+	}
+
 	if ( health == 2){
-		pRect.setFillColor(sf::Color(99, 225, 124));
+		greenLook.setPosition(posX, posY);
+		return greenLook;
+		//pRect.setFillColor(sf::Color(99, 225, 124));
 	}
 	else if (health == 1) {
-		pRect.setFillColor(sf::Color(236, 163, 79));
+		orangeLook.setPosition(posX, posY);
+		return orangeLook;
+		//pRect.setFillColor(sf::Color(236, 163, 79));
 	}
 	else if (health == 0) {
-		pRect.setFillColor(sf::Color(255, 81, 81));
+		redLook.setPosition(posX, posY);
+		return redLook;
+		//pRect.setFillColor(sf::Color(255, 81, 81));
 	}
-	pRect.setPosition(posX, posY);
-	return &pRect;
 }
 
 // Display a circle
@@ -232,8 +282,9 @@ void GameObject::loseHealth(){
 	if (health == 0) {
 		height = 0;
 		width = 0;
-		posX = -1;
-		posY = -1;
+		posX = -100;
+		posY = -100;
+		//redText = NULL;
 	}
 	else {
 		health -= 1;

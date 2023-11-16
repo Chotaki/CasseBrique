@@ -211,7 +211,7 @@ int main()
 			// Drawing each shape on the screen
 			for (int i = 0; i < objectList.size(); i++) {
 				if (objectList[i]->shapeType == 0) {
-					window.draw(*objectList[i]->rectangleDisplay());
+					window.draw(objectList[i]->rectangleDisplay());
 				}
 				else if (objectList[i]->shapeType == 1) {
 					window.draw(*objectList[i]->circleDisplay());
